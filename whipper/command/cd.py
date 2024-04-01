@@ -503,8 +503,7 @@ Log files will log the path to tracks relative to this directory.
                     else:
                         raise RuntimeError("track can't be ripped. "
                                            "Rip attempts number is equal "
-                                           "to %d",
-                                           self.options.max_retries)
+                                           "to {}".format(self.options.max_retries))
                 if trackResult in self.skipped_tracks:
                     print("Skipping CRC comparison for track %d "
                           "due to rip failure" % number)
