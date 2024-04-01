@@ -157,5 +157,6 @@ class EmbedPictureTask(task.Task):
         if flac_pic:
             w = FLAC(self.track_path)
             w.add_picture(flac_pic)
+            w.save()
 
         self.stop()
