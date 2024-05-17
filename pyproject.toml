@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "whipper"
+authors = [
+    {name = "The Whipper Team"},
+]
+description = "A CD-DA ripper prioritising accuracy over speed"
+requires-python = ">=3.6"
+readme = "README.md"
+license = {file = "LICENSE"}
+classifiers = [
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3",
+]
+dependencies = [
+    "musicbrainzngs",
+    "mutagen",
+    "pycdio",
+    "PyGObject",
+    "ruamel.yaml",
+    "setuptools_scm",
+    "discid",
+]
+dynamic = ["version"]
+
+[project.urls]
+Home = "https://github.com/whipper-team/whipper"
+
+[project.optional-dependencies]
+cover_art = ["pillow"]
+docs = ["docutils"]
+
+[project.scripts]
+whipper = "whipper.command.main:main"
+
+# This is necessary, since whipper uses a flat-layout, but has as a 'src'
+# directory and setuptools gets confused otherwise.
+[tool.setuptools.packages.find]
+namespaces = false
+
+[tool.setuptools.package-data]
+"whipper" = ["**"]
+
+[tool.setuptools_scm]
+# Empty, but needed to enable SCM
