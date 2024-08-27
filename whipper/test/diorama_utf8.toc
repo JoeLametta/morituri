@@ -1,0 +1,134 @@
+CD_DA
+
+CD_TEXT {
+  LANGUAGE_MAP {
+    0: 9
+  }
+  LANGUAGE 0 {
+    TITLE "Diorama"
+    PERFORMER "MØL"
+    SIZE_INFO { 0,  1,  8,  0,  7,  3,  0,  0,  0,  0,  0,  0,
+                0,  0,  0,  0,  0,  0,  0,  3, 12,  0,  0,  0,
+                0,  0,  0,  0,  9,  0,  0,  0,  0,  0,  0,  0}
+  }
+}
+
+// Track 1
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "DED832100085"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Fraktur"
+    PERFORMER "MØL"
+  }
+}
+FILE "data.wav" 0 04:19:00
+
+
+// Track 2
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "DED832100086"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Photophobic"
+    PERFORMER "MØL"
+  }
+}
+FILE "data.wav" 04:19:00 05:18:00
+
+
+// Track 3
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "DED832100087"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Serf"
+    PERFORMER "MØL"
+  }
+}
+FILE "data.wav" 09:37:00 05:22:12
+
+
+// Track 4
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "DED832100088"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Vestige"
+    PERFORMER "MØL"
+  }
+}
+FILE "data.wav" 14:59:12 05:38:56
+
+
+// Track 5
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "DED832100089"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Redacted"
+    PERFORMER "MØL"
+  }
+}
+FILE "data.wav" 20:37:68 05:16:25
+
+
+// Track 6
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "DED832100090"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Itinerari"
+    PERFORMER "MØL"
+  }
+}
+FILE "data.wav" 25:54:18 05:03:40
+
+
+// Track 7
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "DED832100091"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Tvesind"
+    PERFORMER "MØL"
+  }
+}
+FILE "data.wav" 30:57:58 07:48:74
+
+
+// Track 8
+TRACK AUDIO
+NO COPY
+NO PRE_EMPHASIS
+TWO_CHANNEL_AUDIO
+ISRC "DED832100092"
+CD_TEXT {
+  LANGUAGE 0 {
+    TITLE "Diorama"
+    PERFORMER "MØL"
+  }
+}
+FILE "data.wav" 38:46:57 07:14:36
+
