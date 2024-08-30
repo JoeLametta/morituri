@@ -195,7 +195,7 @@ class Program:
         assert isinstance(outdir, str), "%r is not str" % outdir
         assert isinstance(template, str), "%r is not str" % template
         v = {}
-        v['A'] = 'Unknown Artist'
+        v['S'] = v['A'] = 'Unknown Artist'
         v['I'] = v['d'] = v['D'] = mbdiscid  # fallback for title
         v['r'] = 'unknown'
         v['R'] = 'Unknown'
