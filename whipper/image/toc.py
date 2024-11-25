@@ -33,7 +33,61 @@ import logging
 logger = logging.getLogger(__name__)
 
 # shared
-_CDTEXT_CANDIDATE_RE = re.compile(r'(?P<key>\w+) "(?P<value>.+)"')
+_CDTEXT_CANDIDATE_RE = re.compile(r'''
+    (?P<key>\w+)   # CD-TEXT key.
+    \s+
+    "(?P<value>    # CD-TEXT value.
+        (?:
+            \\\\   # escaped backslash.
+        |   \\"    # escaped double-quote.
+        |   [^"]   # not a double-quote.
+        )+?        # the value must not be empty.
+    )"
+''', flags=re.VERBOSE)
+
+_STRING_SUBSTITUTIONS_RE = re.compile(r'''
+      \\(?P<octal>[0-8][0-8][0-8])
+    | \\"
+    | \\\\
+''', flags=re.VERBOSE)
+
+
+def _string_contents_repl(match: 're.Match[str]') -> str:
+    group_octal = match.group('octal')
+    if group_octal is not None:
+        code_point = int(group_octal, base=8)
+        return chr(code_point)
+
+    entire_match = match.group(0)
+    if entire_match == '\\"':
+        return '"'
+    elif entire_match == '\\\\':
+        return '\\'
+    else:
+        raise RuntimeError("unexpected match: ", entire_match)
+
+
+def parse_toc_string(str_within_quotes: str) -> str:
+    """
+    Given the a quoted string obtained from a TOC file using
+    _CDTEXT_CANDIDATE_RE, compute the unescaped string contained inside.
+
+    Backslash substitutions fail gracefully, which is important since cdrdao
+    string encoding has been found to be flawed as recently as cdrdao 1.2.5
+    (2023):
+    https://github.com/cdrdao/cdrdao/issues/32
+    https://github.com/whipper-team/whipper/issues/169
+
+    This function assumes cdrdao 1.2.5+ (2023) was used, which unless --no-utf8
+    is passed, provides UTF-8 strings. It also works with older versions as long
+    as the encoding was ASCII or Latin-1.
+
+    Note: CD-Text in MS-JIS produced by cdrdao <1.2.5 will produce mojibake
+    (garbled characters), just like the older code this function replaced.
+    """
+    return _STRING_SUBSTITUTIONS_RE.sub(_string_contents_repl,
+                                        str_within_quotes)
+
 
 # header
 _CATALOG_RE = re.compile(r'^CATALOG "(?P<catalog>\d+)"$')
@@ -208,11 +262,7 @@ class TocFile:
             m = _CDTEXT_CANDIDATE_RE.search(line)
             if m:
                 key = m.group('key')
-                value = m.group('value')
-                # usually, value is encoded with octal escapes and in latin-1
-                # FIXME: other encodings are possible, does cdrdao handle
-                # them ?
-                value = value.encode().decode('unicode_escape')
+                value = parse_toc_string(m.group('value'))
                 if key in table.CDTEXT_FIELDS:
                     # FIXME: consider ISRC separate for now, but this
                     # is a limitation of our parser approach

@@ -5,6 +5,7 @@ import os
 import copy
 import shutil
 import tempfile
+from abc import abstractmethod
 
 from whipper.image import toc
 
@@ -193,6 +194,72 @@ class BreedersTestCase(common.TestCase):
         cue = self.toc.table.cue()
         ref = self.readCue('breeders.cue')
         self.assertEqual(cue, ref)
+
+
+class DioramaTOCMixin:
+    # TODO figure out how to make this class abstract
+    """
+    MØL - Diorama contains CD-Text.
+
+    Two .toc files are provided:
+     - diorama_utf8.toc (UTF-8 mode, cdrdao 1.2.5)
+     - diorama_noutf8.toc (--no-utf8 mode, cdrdao 1.2.5, but representative of
+       any older version of cdrdao)
+
+    Regardless of the version chosen for the toc file, all the same tests should
+    pass, including generating the same .cue file as output.
+    """
+
+    @property
+    @abstractmethod
+    def tocFileName(self) -> str:
+        raise NotImplementedError
+
+    def setUp(self):
+        self.path = os.path.join(os.path.dirname(__file__), self.tocFileName)
+        self.toc = toc.TocFile(self.path)
+        self.toc.parse()
+        self.assertEqual(len(self.toc.table.tracks), 8)
+
+    def testCDText(self):
+        cdt = self.toc.table.cdtext
+        self.assertEqual(cdt['PERFORMER'], 'MØL')
+        self.assertEqual(cdt['TITLE'], 'Diorama')
+
+        t = self.toc.table.tracks[0]
+        cdt = t.cdtext
+        self.assertEqual(cdt['PERFORMER'], 'MØL')
+        self.assertEqual(cdt['TITLE'], 'Fraktur')
+
+    def testConvertCue(self):
+        self.assertTrue(self.toc.table.hasTOC())
+        cue = self.toc.table.cue()
+        with open("/tmp/miau.txt", "w") as f:
+            f.write(cue)
+        ref = self.readCue('diorama.cue')
+        self.maxDiff = None
+        self.assertEqual(cue, ref)
+
+
+class CDTextLatin1TOCTestCase(common.TestCase, common.UnicodeTestMixin,
+                              DioramaTOCMixin):
+    @property
+    def tocFileName(self) -> str:
+        return 'diorama_noutf8.toc'
+
+    def setUp(self):
+        DioramaTOCMixin.setUp(self)
+
+
+class CDTextUTF8TOCTestCase(common.TestCase, common.UnicodeTestMixin,
+                            DioramaTOCMixin):
+    @property
+    def tocFileName(self) -> str:
+        return 'diorama_utf8.toc'
+
+    def setUp(self):
+        DioramaTOCMixin.setUp(self)
+
 
 # Ladyhawke has a data track
 
