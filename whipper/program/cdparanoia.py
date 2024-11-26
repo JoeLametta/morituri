@@ -35,6 +35,7 @@ from whipper.extern.task import task
 import logging
 logger = logging.getLogger(__name__)
 
+cdparanoia = 'cd-paranoia'
 
 class FileSizeError(Exception):
     """The given path does not have the expected size."""
@@ -68,6 +69,12 @@ _PROGRESS_RE = re.compile(r"""
 """, re.VERBOSE)
 
 _ERROR_RE = re.compile("^scsi_read error:")
+
+
+def setCdParanoiaCommand(cmd):
+    global cdparanoia
+    cdparanoia = cmd
+
 
 # from reading cdparanoia source code, it looks like offset is reported in
 # number of single-channel samples, ie. 2 bytes (word) per unit, and absolute
@@ -271,10 +278,10 @@ class ReadTrackTask(task.Task):
 
         bufsize = 1024
         if self._overread:
-            argv = ["cd-paranoia", "--stderr-progress",
+            argv = [cdparanoia, "--stderr-progress",
                     "--sample-offset=%d" % self._offset, "--force-overread", ]
         else:
-            argv = ["cd-paranoia", "--stderr-progress",
+            argv = [cdparanoia, "--stderr-progress",
                     "--sample-offset=%d" % self._offset, ]
         if self._device:
             argv.extend(["--force-cdrom-device", self._device, ])
@@ -573,7 +580,7 @@ _VERSION_RE = re.compile(
 
 def getCdParanoiaVersion():
     getter = common.VersionGetter('cd-paranoia',
-                                  ["cd-paranoia", "-V"],
+                                  [cdparanoia, "-V"],
                                   _VERSION_RE,
                                   "%(version)s %(release)s")
 
@@ -599,7 +606,7 @@ class AnalyzeTask(ctask.PopenTask):
     def __init__(self, device=None):
         # cdparanoia -A *always* writes cdparanoia.log
         self.cwd = tempfile.mkdtemp(suffix='.whipper.cache')
-        self.command = ['cd-paranoia', '-A']
+        self.command = [cdparanoia, '-A']
         if device:
             self.command += ['-d', device]
 

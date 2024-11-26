@@ -13,12 +13,17 @@ from whipper.command.basecommand import BaseCommand
 from whipper.common import common, directory, config
 from whipper.extern.task import task
 from whipper.program.utils import eject_device
+from whipper.program import cdparanoia
 
 import logging
 logger = logging.getLogger(__name__)
 
 
 def main():
+    cdparanoia_cmd = config.Config().get('main', 'cdparanoia')
+    if cdparanoia_cmd:
+        cdparanoia.setCdParanoiaCommand(cdparanoia_cmd)
+
     server = config.Config().get_musicbrainz_server()
     https_enabled = server['scheme'] == 'https'
     try:

@@ -179,16 +179,26 @@ class _CD(BaseCommand):
 
         # result
 
-        self.program.result.cdrdaoVersion = cdrdao.version()
-        self.program.result.cdparanoiaVersion = \
-            cdparanoia.getCdParanoiaVersion()
+
         info = drive.getDeviceInfo(self.device)
         if info:
+            try:
+                cdparanoia_cmd = self.config.getCdparanoia(*info)
+                logger.info("using configured cdparanoia command %s", cdparanoia_cmd)
+                cdparanoia.setCdParanoiaCommand(cdparanoia_cmd)
+            except KeyError:
+                pass
+
             try:
                 self.program.result.cdparanoiaDefeatsCache = \
                     self.config.getDefeatsCache(*info)
             except KeyError as e:
                 logger.debug('got key error: %r', (e, ))
+
+        self.program.result.cdrdaoVersion = cdrdao.version()
+        self.program.result.cdparanoiaVersion = \
+            cdparanoia.getCdParanoiaVersion()
+
         self.program.result.artist = self.program.metadata \
             and self.program.metadata.artist \
             or 'Unknown Artist'

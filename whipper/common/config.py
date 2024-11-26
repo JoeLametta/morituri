@@ -101,6 +101,10 @@ class Config:
         option = self._getDriveOption(vendor, model, release, 'defeats_cache')
         return option == 'True'
 
+    def getCdparanoia(self, vendor, model, release):
+        """Get the cdparanoia command for the given drive."""
+        return self._getDriveOption(vendor, model, release, 'cdparanoia')
+
     def _findDriveSection(self, vendor, model, release):
         for name in self._parser.sections():
             if not name.startswith('drive:'):
