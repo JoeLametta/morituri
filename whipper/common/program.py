@@ -359,8 +359,11 @@ class Program:
 
                 if prompt:
                     guess = (deltas[lowest])[0].mbid
+                    print("\nPlease select a release. You only need to match "
+                          "the last few characters.")
                     release = input(
-                        "\nPlease select a release [%s]: " % guess)
+                        "With no input the release will be [%s]: " %
+                        guess).lower()
 
                     if not release:
                         release = guess
