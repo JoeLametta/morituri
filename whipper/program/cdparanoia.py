@@ -440,7 +440,8 @@ class ReadVerifyTrackTask(task.MultiSeparateTask):
     _tmppath = None
 
     def __init__(self, path, table, start, stop, overread, offset=0,
-                 device=None, taglist=None, what="track", coverArtPath=None):
+                 device=None, extraFlacArgs=None, taglist=None, what="track",
+                 coverArtPath=None):
         """
         Init ReadVerifyTrackTask.
 
@@ -456,6 +457,8 @@ class ReadVerifyTrackTask(task.MultiSeparateTask):
         :type offset: int
         :param device: the device to rip from
         :type device: str
+        :param extraFlacArgs: additional encoding args to pass to flac binary
+        :type extraFlacArgs: list
         :param taglist: a dict of tags
         :type taglist: dict
         """
@@ -499,7 +502,8 @@ class ReadVerifyTrackTask(task.MultiSeparateTask):
 
         from whipper.common import encode
 
-        self.tasks.append(encode.FlacEncodeTask(tmppath, tmpoutpath))
+        self.tasks.append(encode.FlacEncodeTask(tmppath, tmpoutpath,
+                                                extraFlacArgs))
 
         # MerlijnWajer: XXX: We run the CRC32Task on the wav file, because it's
         # in general stupid to run the CRC32 on the flac file since it already

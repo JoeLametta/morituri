@@ -557,8 +557,8 @@ class Program:
                      'result %r', trackResult.testcrc, t.checksum, ret)
         return ret
 
-    def ripTrack(self, runner, trackResult, offset, device, taglist,
-                 overread, what=None, coverArtPath=None):
+    def ripTrack(self, runner, trackResult, offset, device, extraFlacArgs,
+                 taglist, overread, what=None, coverArtPath=None):
         """
         Rip and store a track of the disc.
 
@@ -573,6 +573,8 @@ class Program:
         :type offset: int
         :param device: path to the hardware disc drive
         :type device: str
+        :param extraFlacArgs: additional encoding args to pass to flac binary
+        :type extraFlacArgs: list
         :param taglist: dictionary of tags for the given track
         :type taglist: dict
         :param overread: whether to force overreading into the
@@ -600,6 +602,7 @@ class Program:
                                            stop, overread,
                                            offset=offset,
                                            device=device,
+                                           extraFlacArgs=extraFlacArgs,
                                            taglist=taglist,
                                            what=what,
                                            coverArtPath=coverArtPath)

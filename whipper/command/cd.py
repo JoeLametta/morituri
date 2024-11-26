@@ -326,6 +326,11 @@ Log files will log the path to tracks relative to this directory.
                                  help="continue ripping further tracks "
                                  "instead of giving up if a track "
                                  "can't be ripped")
+        self.parser.add_argument('--extra-flac-encode-args',
+                                 action="store", dest="extra_flac_encode_args",
+                                 help="extra arguments to pass to the flac "
+                                 "encode command",
+                                 default="")
 
     def handle_arguments(self):
         self.options.output_directory = os.path.expanduser(
@@ -471,10 +476,12 @@ Log files will log the path to tracks relative to this directory.
                             self.itable.tracks[number - 1].isrc is not None):
                         tag_list['ISRC'] = self.itable.tracks[number - 1].isrc
 
+                    extraFlacArgs = self.options.extra_flac_encode_args.split()
                     try:
                         self.program.ripTrack(self.runner, trackResult,
                                               offset=int(self.options.offset),
                                               device=self.device,
+                                              extraFlacArgs=extraFlacArgs,
                                               taglist=tag_list,
                                               overread=self.options.overread,
                                               what='track %d of %d%s' % (

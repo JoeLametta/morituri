@@ -50,9 +50,11 @@ class SoxPeakTask(task.Task):
 class FlacEncodeTask(task.Task):
     description = 'Encoding to FLAC'
 
-    def __init__(self, track_path, track_out_path, what="track"):
+    def __init__(self, track_path, track_out_path, extra_flac_args,
+                 what="track"):
         self.track_path = track_path
         self.track_out_path = track_out_path
+        self.extra_flac_args = extra_flac_args
         self.new_path = None
         self.description = 'Encoding %s to FLAC' % what
 
@@ -61,7 +63,7 @@ class FlacEncodeTask(task.Task):
         self.schedule(0.0, self._flac_encode)
 
     def _flac_encode(self):
-        flac.encode(self.track_path, self.track_out_path)
+        flac.encode(self.track_path, self.track_out_path, self.extra_flac_args)
         self.stop()
 
 
