@@ -264,6 +264,10 @@ defeats_cache = True			; whether the drive is capable of defeating the audio cac
 read_offset = 6				; drive read offset in positive/negative frames (no leading +)
 # do not edit the values 'vendor', 'model', and 'release'; they are used by whipper to match the drive
 
+# top-level whipper arguments go in [whipper]; subcommand arguments go in [whipper.subcommand...]
+[whipper]
+eject = always
+
 # command line defaults for `whipper cd rip`
 [whipper.cd.rip]
 unknown = True
