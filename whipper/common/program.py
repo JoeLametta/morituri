@@ -222,8 +222,8 @@ class Program:
             v['B'] = metadata.barcode
             v['C'] = metadata.catalogNumber
             v['c'] = metadata.releaseDisambCmt
-            v['M'] = metadata.discTotal
-            v['N'] = metadata.discNumber
+            v['M'] = '%02d' % (metadata.discTotal or 0)
+            v['N'] = '%02d' % (metadata.discNumber or 1)
             v['T'] = metadata.mediumTitle
             if metadata.releaseType:
                 v['R'] = metadata.releaseType
