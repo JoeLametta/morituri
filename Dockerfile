@@ -56,7 +56,7 @@ RUN ldconfig
 # add user (+ group workaround for ArchLinux)
 RUN useradd -m worker --uid ${uid} -G cdrom \
     && if [ -n "${optical_gid}" ]; then groupadd -f -g "${optical_gid}" optical \
-    && usermod -a -G optical worker; fi \
+    && usermod -a -G "${optical_gid}" worker; fi \
     && mkdir -p /output /home/worker/.config/whipper \
     && chown worker: /output /home/worker/.config/whipper
 VOLUME ["/home/worker/.config/whipper", "/output"]
