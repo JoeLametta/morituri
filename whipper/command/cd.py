@@ -583,6 +583,7 @@ Log files will log the path to tracks relative to this directory.
         except accurip.EntryNotFound:
             logger.warning('AccurateRip entry not found')
 
+        accurip.log_notfound_crcs(self.program.result)
         accurip.print_report(self.program.result)
 
         self.program.writeLog(discName, self.logger)

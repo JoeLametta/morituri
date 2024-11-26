@@ -5,7 +5,7 @@ from ruamel.yaml.comments import CommentedMap as OrderedDict
 
 import whipper
 
-from whipper.common import common
+from whipper.common import accurip, common
 from whipper.common.yaml import YAML
 from whipper.result import result
 
@@ -115,6 +115,10 @@ class WhipperLogger(result.Logger):
             data[t.number] = track_dict
             duration += t.testduration + t.copyduration
         riplog["Tracks"] = data
+
+        # Track Summary section
+        data = accurip.generate_report(ripResult)
+        riplog["Track Summary"] = data
 
         # Status report
         data = OrderedDict()

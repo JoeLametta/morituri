@@ -24,6 +24,7 @@ import whipper
 import os
 from urllib.error import URLError, HTTPError
 from urllib.request import urlopen, Request
+from ruamel.yaml.comments import CommentedMap as OrderedDict
 
 from whipper.program.arc import accuraterip_checksum
 
@@ -211,8 +212,18 @@ def verify_result(result, responses, checksums):
     return _match_responses(tracks, responses)
 
 
-def print_report(result):
+def log_notfound_crcs(result):
+    """Generate log messages for any failed tracks"""
+    for _, track in enumerate(result.tracks):
+        if track.number == 0:
+            continue
+        if not (track.AR['v1']['CRC'] or track.AR['v2']['CRC']):
+            logger.error('no track AR CRC on non-HTOA track %d', track.number)
+
+
+def generate_report(result):
     """Print AccurateRip verification results."""
+    report = OrderedDict()
     for _, track in enumerate(result.tracks):
         status = 'rip NOT accurate'
         conf = '(not found)'
@@ -237,13 +248,19 @@ def print_report(result):
                     )
         # htoa tracks (i == 0) do not have an ARCRC
         if track.number == 0:
-            print('track  0: unknown          (not tracked)')
+            report['Track  0'] = 'unknown          (not tracked)'
             continue
         if not (track.AR['v1']['CRC'] or track.AR['v2']['CRC']):
-            logger.error('no track AR CRC on non-HTOA track %d', track.number)
-            print('track %2d: unknown          (error)' % track.number)
+            report['Track %2d' % track.number] = 'unknown          (error)'
         else:
-            print('track %2d: %-16s %-23s v1 [%s], v2 [%s], DB [%s]' % (
-                track.number, status, conf,
-                track.AR['v1']['CRC'], track.AR['v2']['CRC'], db
-            ))
+            report['Track %2d' % track.number] = '%-16s %-23s v1 [%s], v2 [%s], DB [%s]' % (
+                status, conf, track.AR['v1']['CRC'], track.AR['v2']['CRC'], db
+            )
+    return report
+
+
+def print_report(result):
+    """Generate and print AccurateRip verification results summary."""
+    report = generate_report(result)
+    for key, item in report.items():
+        print('%s: %s' % (key.lower(), item))
