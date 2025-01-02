@@ -42,8 +42,10 @@ class TestAccurateRipResponse(TestCase):
         self.assertEqual(responses[1].discId1, '0000f21c')
         self.assertEqual(responses[1].discId2, '00027ef8')
         self.assertEqual(responses[1].cddbDiscId, '05021002')
-        self.assertEqual(responses[1].confidences[0], 7)
-        self.assertEqual(responses[1].confidences[1], 7)
+        # The following two values may increase in the Accurip database over time;
+        # both are 9 as retrieved on 2025-01-02
+        self.assertGreaterEqual(responses[1].confidences[0], 9)
+        self.assertGreaterEqual(responses[1].confidences[1], 9)
         self.assertEqual(responses[1].checksums[0], 'dc77f9ab')
         self.assertEqual(responses[1].checksums[1], 'dd97d2c3')
 
